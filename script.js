@@ -67,6 +67,119 @@ const questions = [
 from roster;</code></pre>
     `,
   },
+  {
+    id: "q8",
+    prompt: `What does it mean if a team's win probability is 1?`,
+    solution: `It means they have won the game.`,
+  },
+  {
+    id: "q9",
+    prompt: `Suppose you have the team information table in your database. The table is named teams. Write a query that returns one column of the team abbreviations:`,
+    solution: `
+      <pre><code>select team_abbr
+from teams;</code></pre>
+    `,
+  },
+  {
+    id: "q10",
+    prompt: `Suppose you have the team information table in your database. The table is named teams. Write a query that returns two columns, where the first is the team abbreviation and the second is the team division.`,
+    solution: `
+      <pre><code>select team_abbr, team_division
+from teams;</code></pre>
+    `,
+  },
+  {
+    id: "q11",
+    prompt: `Question 11. Suppose you have the team information table in your database. The table is named teams. Write a query that returns one column that lists only the team abbreviations from the NFC East.`,
+    solution: `
+      <pre><code>select team_abbr
+from teams
+where team_division = 'NFC East';</code></pre>
+    `,
+  },
+  {
+    id: "q12",
+    prompt: `Suppose you have the eagles roster as a table in your database. The table is named roster. Write a query that returns one column of the players' names, ordered alphabetically, with no duplicates.`,
+    solution: `
+      <p>There are two possibilities.</p>
+      <p>Using GROUP BY:</p>
+      <pre><code>select player_name
+from roster
+group by player_name
+order by player_name;</code></pre>
+      <p>Or using DISTINCT:</p>
+      <pre><code>select distinct player_name
+from roster
+order by player_name;</code></pre>
+    `,
+  },
+  {
+    id: "q13",
+    prompt: `Suppose you have the eagles roster as a table in your database. The table is named roster. Write a query that returns just one number, which is how many records there are in the table.`,
+    solution: `
+      <pre><code>select count(*)
+from roster;</code></pre>
+    `,
+  },
+  {
+    id: "q14",
+    prompt: `Suppose you have the eagles play-by-play data as a table in your database. The table is named plays. Write a query that returns two columns, where the first column is the week and the second column is the total air yards achieved by J.Hurts that week.`,
+    solution: `
+      <pre><code>select week, sum(air_yards)
+from plays
+where passer_player_name = 'J.Hurts'
+group by week;</code></pre>
+    `,
+  },
+  {
+    id: "q15",
+    prompt: `Suppose you have the eagles play-by-play data as a table in your database. The table is named plays. You also have the teams information table in your database. This table is named teams. Write a query that returns three columns: the week, the FULL name of the possession team, and the number of seconds remaining in the game.`,
+    solution: `
+      <pre><code>select p.week, t.team_name, p.game_seconds_remaining
+from plays p
+inner join teams t
+  on p.posteam = t.team_abbr;</code></pre>
+    `,
+  },
+  {
+    id: "q16",
+    prompt: `Suppose you have the eagles play-by-play data as a table in your database. The table is named eagles. Write a query that returns two columns: the play_id and the number of MINUTES ELAPSED in the game, all for just week 1.`,
+    solution: `
+      <pre><code>select play_id, 60 - game_seconds_remaining/60
+from eagles
+where week = 1;</code></pre>
+    `,
+  },
+  {
+    id: "q17",
+    prompt: `Explain what the following query returns. Be as precise as you can:
+<pre><code>WITH weekly AS (
+  SELECT
+    week,
+    SUM(air_yards) AS weekly_air_yards
+  FROM eagles
+  WHERE passer_player_name = 'J.Hurts'
+  GROUP BY week
+)
+SELECT
+  week,
+  SUM(weekly_air_yards) OVER (
+    ORDER BY week
+    ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+  ) AS cum_air_yards
+FROM weekly
+ORDER BY week;</code></pre>`,
+    solution: `This returns two columns where one is the week and the other is Jalen Hurts accumulated air_yards up to and including that week.`,
+  },
+  {
+    id: "q18",
+    prompt: `Suppose you have the eagles play-by-play data in your database and the table is named eagles. Write a query that returns just one number: the largest number of air-yards achieved by Jalen Hurts all season.`,
+    solution: `
+      <pre><code>select max(air_yards)
+from eagles
+where passer_player_name = 'J.Hurts';</code></pre>
+    `,
+  },
 ];
 
 function $(sel, root = document) {
